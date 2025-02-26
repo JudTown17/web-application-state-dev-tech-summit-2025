@@ -57,9 +57,14 @@
         right: 0;
         width: 240px;
         padding: 10px;
-        height: 60px;
+        height: 140px;
       }
 
+      input[type="text"] {
+        width: 100%;
+        margin-bottom: 20px;
+      }
+      
       .active-map {
         color: #fff;
         background-color: rgba(34, 111, 14, 1);
@@ -131,6 +136,13 @@
     </section>
     <div id="viewDiv" class="esri-widget"></div>
     <div class="create-map esri-widget">
+        <label class="esri-feature-form__label">ID: </label>
+        <input
+            id="webMapId"
+            type="text"
+            class="esri-input"
+            value=""
+        />
         <input
             id="addWebMap"
             type="button"
