@@ -64,7 +64,7 @@
         width: 100%;
         margin-bottom: 20px;
       }
-      
+
       .active-map {
         color: #fff;
         background-color: rgba(34, 111, 14, 1);
@@ -101,6 +101,22 @@
           map: webmaps[0],
           container: "viewDiv"
         });
+
+        const addMap = document.getElementById("addWebMap");
+
+        addMap.addEventListener("click", () => {
+            const webMapIdElement = document.getElementById("webMapId");
+            const id = webMapIdElement.value;
+            console.log("Web Map ID: ", id);
+            const map = new WebMap({
+                portalItem: {
+                    id: id
+                }
+            });
+            view.map = map;
+            webMapIdElement.value = '';
+        });
+
 
         document.querySelector(".btns").addEventListener("click", (event) => {
           /************************************************************
