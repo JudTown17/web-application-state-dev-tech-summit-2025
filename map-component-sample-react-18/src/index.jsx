@@ -5,8 +5,13 @@ import "./index.css";
 // Individual imports for each component used in this sample
 import "@arcgis/map-components/dist/components/arcgis-map";
 import "@arcgis/map-components/dist/components/arcgis-legend";
-import "@arcgis/map-components/dist/components/arcgis-search";
-import { ArcgisMap, ArcgisSearch, ArcgisLegend } from "@arcgis/map-components-react";
+import { ArcgisMap, ArcgisLegend } from "@arcgis/map-components-react";
+
+import {
+  CalciteButton,
+  CalciteSelect,
+  CalciteOption
+} from '@esri/calcite-components-react';
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -17,7 +22,7 @@ root.render(
         console.log("MapView ready", event);
       }}
     >
-      <ArcgisSearch position="top-right"></ArcgisSearch>
+      <CalciteButton>Add Map</CalciteButton>
       <ArcgisLegend position="bottom-left"></ArcgisLegend>
     </ArcgisMap>
   </React.StrictMode>
