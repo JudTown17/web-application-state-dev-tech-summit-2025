@@ -6,11 +6,24 @@ export type WebMapInfo = {
 };
 
 export type WebMapsState = {
-    webMaps: WebMapInfo[]
+    webMaps: WebMapInfo[],
+    activeMapId: string
 };
 
 const defaultState: WebMapsState = {
-    webMaps: []
+    webMaps: [{
+        title: "Missing Migrants",
+        id: "ad5759bf407c4554b748356ebe1886e5"
+    },
+    {
+        title: "Refugee Routes",
+        id: "71ba2a96c368452bb73d54eadbd59faa"
+    },
+    {
+        title: "2015 European Sea Arrivals",
+        id: "45ded9b3e0e145139cc433b503a8f5ab"
+    }],
+    activeMapId: "ad5759bf407c4554b748356ebe1886e5"
 };
 
 const webMapsSlice = createSlice({
@@ -21,13 +34,19 @@ const webMapsSlice = createSlice({
             webMapsState,
             action: PayloadAction<WebMapInfo>
         ) => {
-            //add WebMap to state
             webMapsState.webMaps.push(action.payload);
+        },
+        updateSelectedMap: (
+            webMapsState,
+            action: PayloadAction<string>
+        ) => {
+            webMapsState.activeMapId = action.payload;
         }
     }
 });
 
 export const {
-    addNewMap
+    addNewMap,
+    updateSelectedMap
 } = webMapsSlice.actions;
 export default webMapsSlice.reducer;
