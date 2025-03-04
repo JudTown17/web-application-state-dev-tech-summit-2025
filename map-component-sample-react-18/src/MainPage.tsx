@@ -12,14 +12,16 @@ import { CalciteTabs, CalciteTabNav, CalciteTab, CalciteTabTitle, CalciteButton,
 import { ArcgisMap, ArcgisLegend } from "@arcgis/map-components-react";
 import { StoreDispatch, StoreState } from "./features/store";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewMap, updateSelectedMap } from "./features/webMapsSlice";
+import { addNewMap, updateSelectedMap, editMapTitle } from "./features/webMapsSlice";
 import MapSelector from "./MapSelector";
 
 const MainPage = (): JSX.Element => {
 
-    const [selectedWebMapItemId, setSelectedWebMapItemId] = useState<string>("ad5759bf407c4554b748356ebe1886e5");
+    // const [selectedWebMapItemId, setSelectedWebMapItemId] = useState<string>("ad5759bf407c4554b748356ebe1886e5");
 
     const selectedId = useSelector((state: StoreState) => state.webMaps.activeMapId);
+
+    const [newWebMapTitle, setNewWebMapTitle] = useState<string>("");
 
     const dispatch: StoreDispatch = useDispatch();
     return (
@@ -33,35 +35,23 @@ const MainPage = (): JSX.Element => {
                 <MapSelector selectedId={selectedId} onSelectedIdChanged={(id) => {
                     dispatch(updateSelectedMap(id));
                 }}></MapSelector>
-                {/* <MapSelector selectedId={selectedWebMapItemId} onSelectedIdChanged={(id) => {
-                    setSelectedWebMapItemId(id);
-                }}></MapSelector> */}
-                <ArcgisMap
-                    itemId={selectedId}
-                    onArcgisViewReadyChange={(event) => {
-                    console.log("MapView ready", event);
-                    }}
-                >
-                </ArcgisMap>
+                <ArcgisMap itemId={selectedId}></ArcgisMap>
             </CalciteTab>
             <CalciteTab>
                 <MapSelector selectedId={selectedId} onSelectedIdChanged={(id) => {
                     dispatch(updateSelectedMap(id));
                 }}></MapSelector>
-                <CalciteInputText placeholder="Enter Web Map Title..."></CalciteInputText>
-                <ArcgisMap itemId={selectedId}>
-                </ArcgisMap>
+                <CalciteInputText placeholder="Enter Web Map Title..." value={newWebMapTitle} onCalciteInputTextChange={(event) => {
+                    setNewWebMapTitle(event.target.value);
+                }}></CalciteInputText>
+                <CalciteButton onClick={() => {
+                    console.log("Save Title clicked!");
+                    console.log("New web map title: ", newWebMapTitle);
+                    dispatch(editMapTitle(newWebMapTitle));
+                }}>Save Title</CalciteButton>
+                <ArcgisMap itemId={selectedId}></ArcgisMap>
             </CalciteTab>
             <CalciteTab>
-                {/* <CalciteSelect onCalciteSelectChange={(event): void => {
-                    let selectedId = event.target.value;
-                    console.log("Selected web map id: ", selectedId);
-                    setSelectedWebMapItemId(selectedId);
-                }}>
-                    <CalciteOption value="ad5759bf407c4554b748356ebe1886e5">Missing Migrants</CalciteOption>
-                    <CalciteOption value="71ba2a96c368452bb73d54eadbd59faa">Refugee Routes</CalciteOption>
-                    <CalciteOption value="45ded9b3e0e145139cc433b503a8f5ab">2015 European Sea Arrivals</CalciteOption>
-                </CalciteSelect> */}
                 <MapSelector selectedId={selectedId} onSelectedIdChanged={(id) => {
                     dispatch(updateSelectedMap(id));
                 }}></MapSelector>
@@ -69,23 +59,6 @@ const MainPage = (): JSX.Element => {
                     <ArcgisLegend position="bottom-left"></ArcgisLegend>
                 </ArcgisMap>
             </CalciteTab>
-        {/* <ArcgisMap
-                itemId="d5dda743788a4b0688fe48f43ae7beb9"
-                onArcgisViewReadyChange={(event) => {
-                  console.log("MapView ready", event);
-                }}
-        >
-            <CalciteButton onClick={() => {
-                console.log("Add Map clicked.");
-                dispatch(addNewMap({
-                    title: "Jud Test",
-                    id: "ad5759bf407c4554b748356ebe1886e5"
-                  }));
-                }
-            }>Add Map</CalciteButton>
-            <CalciteInputText placeholder="Enter Web Map Item ID"></CalciteInputText>
-            <ArcgisLegend position="bottom-left"></ArcgisLegend>
-        </ArcgisMap> */}
         </CalciteTabs>
     );
 };

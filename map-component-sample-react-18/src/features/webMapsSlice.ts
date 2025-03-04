@@ -41,12 +41,22 @@ const webMapsSlice = createSlice({
             action: PayloadAction<string>
         ) => {
             webMapsState.activeMapId = action.payload;
+        },
+        editMapTitle: (
+            webMapsState,
+            action: PayloadAction<string>
+        ) => {
+            const currentMap = webMapsState.webMaps.find(map => map.id === webMapsState.activeMapId);
+            if (currentMap) {
+                currentMap.title = action.payload;
+            }
         }
     }
 });
 
 export const {
     addNewMap,
-    updateSelectedMap
+    updateSelectedMap,
+    editMapTitle
 } = webMapsSlice.actions;
 export default webMapsSlice.reducer;

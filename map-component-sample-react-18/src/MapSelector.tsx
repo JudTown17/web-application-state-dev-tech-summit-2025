@@ -11,7 +11,6 @@ export type MapSelectorProps = {
 };
 
 const MapSelector = (props: MapSelectorProps): JSX.Element => {
-    // const [selectedWebMapItemId, setSelectedWebMapItemId] = useState<string>(props.selectedId);
     return (
         <CalciteSelect 
             value={props.selectedId} 
