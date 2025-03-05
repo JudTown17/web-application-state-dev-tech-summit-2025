@@ -5,10 +5,10 @@ import "@esri/calcite-components/dist/components/calcite-tab";
 import "@esri/calcite-components/dist/components/calcite-tab-title";
 import "@esri/calcite-components/dist/components/calcite-button";
 import "@esri/calcite-components/dist/components/calcite-input-text";
-import "@esri/calcite-components/dist/components/calcite-select";
-import "@esri/calcite-components/dist/components/calcite-option";
+import "@esri/calcite-components/dist/components/calcite-dialog";
+import "@esri/calcite-components/dist/components/calcite-label";
 
-import { CalciteTabs, CalciteTabNav, CalciteTab, CalciteTabTitle, CalciteButton, CalciteInputText, CalciteSelect, CalciteOption } from "@esri/calcite-components-react";
+import { CalciteTabs, CalciteTabNav, CalciteTab, CalciteTabTitle, CalciteButton, CalciteInputText, CalciteDialog, CalciteLabel } from "@esri/calcite-components-react";
 import { ArcgisMap, ArcgisLegend } from "@arcgis/map-components-react";
 import { StoreDispatch, StoreState } from "./features/store";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,6 +20,10 @@ const MainPage = (): JSX.Element => {
     const selectedId = useSelector((state: StoreState) => state.webMaps.activeMapId);
 
     const [newWebMapTitle, setNewWebMapTitle] = useState<string>("");
+    const [addMapDialogOpen, setAddMapDialogOpen] = useState<boolean>(false);
+
+    const [webMapTitleToAdd, setWebMapTitleToAdd] = useState<string>("");
+    const [webMapIdToAdd, setWebMapIdToAdd] = useState<string>("");
 
     const dispatch: StoreDispatch = useDispatch();
     return (
@@ -33,6 +37,33 @@ const MainPage = (): JSX.Element => {
                 <MapSelector selectedId={selectedId} onSelectedIdChanged={(id) => {
                     dispatch(updateSelectedMap(id));
                 }}></MapSelector>
+                <CalciteButton onClick={() => {
+                    setAddMapDialogOpen(true);
+                }}>Add Map</CalciteButton>
+                <CalciteDialog open={addMapDialogOpen} modal={true} heading="Add Map">
+                    <CalciteLabel>
+                        Map Title
+                        <CalciteInputText value={webMapTitleToAdd} onCalciteInputTextChange={(event) => {
+                            setWebMapTitleToAdd(event.target.value);
+                        }}></CalciteInputText>
+                    </CalciteLabel>
+                    <CalciteLabel>
+                        Map Item ID
+                        <CalciteInputText value={webMapIdToAdd} onCalciteInputTextChange={(event) => {
+                            setWebMapIdToAdd(event.target.value);
+                        }}></CalciteInputText>
+                    </CalciteLabel>
+                    <CalciteButton onClick={() => {
+                        dispatch(addNewMap({
+                            title: webMapTitleToAdd,
+                            id: webMapIdToAdd
+                        }));
+                        dispatch(updateSelectedMap(webMapIdToAdd));
+                        setAddMapDialogOpen(false);
+                        setWebMapTitleToAdd("");
+                        setWebMapIdToAdd("");
+                    }}>Save</CalciteButton>
+                </CalciteDialog>
                 <ArcgisMap itemId={selectedId}></ArcgisMap>
             </CalciteTab>
             <CalciteTab>
@@ -43,8 +74,6 @@ const MainPage = (): JSX.Element => {
                     setNewWebMapTitle(event.target.value);
                 }}></CalciteInputText>
                 <CalciteButton onClick={() => {
-                    console.log("Save Title clicked!");
-                    console.log("New web map title: ", newWebMapTitle);
                     dispatch(editMapTitle(newWebMapTitle));
                     setNewWebMapTitle("");
                 }}>Save Title</CalciteButton>
