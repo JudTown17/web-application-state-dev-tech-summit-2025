@@ -17,8 +17,6 @@ import MapSelector from "./MapSelector";
 
 const MainPage = (): JSX.Element => {
 
-    // const [selectedWebMapItemId, setSelectedWebMapItemId] = useState<string>("ad5759bf407c4554b748356ebe1886e5");
-
     const selectedId = useSelector((state: StoreState) => state.webMaps.activeMapId);
 
     const [newWebMapTitle, setNewWebMapTitle] = useState<string>("");
@@ -48,6 +46,7 @@ const MainPage = (): JSX.Element => {
                     console.log("Save Title clicked!");
                     console.log("New web map title: ", newWebMapTitle);
                     dispatch(editMapTitle(newWebMapTitle));
+                    setNewWebMapTitle("");
                 }}>Save Title</CalciteButton>
                 <ArcgisMap itemId={selectedId}></ArcgisMap>
             </CalciteTab>
