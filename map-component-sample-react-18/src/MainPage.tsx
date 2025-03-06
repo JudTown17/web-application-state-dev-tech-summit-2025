@@ -25,18 +25,24 @@ const MainPage = (): JSX.Element => {
     const [webMapTitleToAdd, setWebMapTitleToAdd] = useState<string>("");
     const [webMapIdToAdd, setWebMapIdToAdd] = useState<string>("");
 
+    const [legendTabActive, setLegendTabActive] = useState<boolean>(false);
+
     const dispatch: StoreDispatch = useDispatch();
     return (
-        <CalciteTabs>
+        <div>  
+        <CalciteTabs position="top">
             <CalciteTabNav slot="title-group">
-                <CalciteTabTitle>Add Map</CalciteTabTitle>
-                <CalciteTabTitle>Edit Map Title</CalciteTabTitle>
-                <CalciteTabTitle>Legend</CalciteTabTitle>
+                <CalciteTabTitle onCalciteTabsActivate={() => {
+                    setLegendTabActive(false);
+                }}>Add Map</CalciteTabTitle>
+                <CalciteTabTitle onCalciteTabsActivate={() => {
+                    setLegendTabActive(false);
+                }}>Edit Map Title</CalciteTabTitle>
+                <CalciteTabTitle onCalciteTabsActivate={() => {
+                    setLegendTabActive(true);
+                }}>Legend</CalciteTabTitle>
             </CalciteTabNav>
             <CalciteTab>
-                <MapSelector selectedId={selectedId} onSelectedIdChanged={(id) => {
-                    dispatch(updateSelectedMap(id));
-                }}></MapSelector>
                 <CalciteButton onClick={() => {
                     setAddMapDialogOpen(true);
                 }}>Add Map</CalciteButton>
@@ -64,12 +70,8 @@ const MainPage = (): JSX.Element => {
                         setWebMapIdToAdd("");
                     }}>Save</CalciteButton>
                 </CalciteDialog>
-                <ArcgisMap itemId={selectedId}></ArcgisMap>
             </CalciteTab>
             <CalciteTab>
-                <MapSelector selectedId={selectedId} onSelectedIdChanged={(id) => {
-                    dispatch(updateSelectedMap(id));
-                }}></MapSelector>
                 <CalciteInputText placeholder="Enter Web Map Title..." value={newWebMapTitle} onCalciteInputTextChange={(event) => {
                     setNewWebMapTitle(event.target.value);
                 }}></CalciteInputText>
@@ -77,17 +79,20 @@ const MainPage = (): JSX.Element => {
                     dispatch(editMapTitle(newWebMapTitle));
                     setNewWebMapTitle("");
                 }}>Save Title</CalciteButton>
-                <ArcgisMap itemId={selectedId}></ArcgisMap>
             </CalciteTab>
-            <CalciteTab>
-                <MapSelector selectedId={selectedId} onSelectedIdChanged={(id) => {
-                    dispatch(updateSelectedMap(id));
-                }}></MapSelector>
-                <ArcgisMap itemId={selectedId}>
-                    <ArcgisLegend position="bottom-left"></ArcgisLegend>
-                </ArcgisMap>
-            </CalciteTab>
+            <CalciteTab></CalciteTab>
         </CalciteTabs>
+        <MapSelector selectedId={selectedId} onSelectedIdChanged={(id) => {
+            dispatch(updateSelectedMap(id));
+        }}></MapSelector>
+        <ArcgisMap itemId={selectedId}>
+            {!legendTabActive ? (
+                    <></>
+                ) : (
+                <ArcgisLegend position="bottom-left"></ArcgisLegend>
+            )}
+        </ArcgisMap>
+        </div>
     );
 };
 

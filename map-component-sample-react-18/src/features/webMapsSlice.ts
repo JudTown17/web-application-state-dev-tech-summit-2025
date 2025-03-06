@@ -35,6 +35,7 @@ const webMapsSlice = createSlice({
             action: PayloadAction<WebMapInfo>
         ) => {
             webMapsState.webMaps.push(action.payload);
+            webMapsState.activeMapId = action.payload.id;
         },
         updateSelectedMap: (
             webMapsState,
